@@ -3,7 +3,7 @@ module main
 import os
 import strconv
 
-fn part_one(file string) {
+pub fn part_one(file string) {
 	lines := file.split('\n')
 	mut values := []int{}
 
@@ -34,7 +34,7 @@ fn part_one(file string) {
 	println('Part One: ${result}')
 }
 
-fn part_two(file string) {
+pub fn part_two(file string) {
 	word_to_number := {
 		'one':   1
 		'two':   2
@@ -55,8 +55,8 @@ fn part_two(file string) {
 
 		for key, value in word_to_number {
 			if line.contains(key) {
-				final_line = final_line.replace(key, '${key.substr(0, 1)}${value}${key.substr(key.len - 1,
-					key.len)}')
+				replace_with := key.substr(key.len - 1, key.len)
+				final_line = final_line.replace(key, '${key.substr(0, 1)}${value}${replace_with}')
 			}
 		}
 
