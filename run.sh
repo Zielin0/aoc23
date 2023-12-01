@@ -1,46 +1,42 @@
-#! /bin/bash
+#!/bin/bash
 
 set -e
 
-function run_a_day() {
-  for dir in ./day_*/
-  do
-    dir=${dir%*/}
-    readarray -d "_" -t arr <<< "$dir"
+run_a_day() {
+  local day="$1"
+  local dir="./day_${day}"
 
-    if [ $1 = ${arr[1]} ]; then
-      cd $dir
-      echo "---- Running: Day ${arr[1]} ----" | xargs
-      v run main.v
-    else
-      echo "ERROR: Directory not found"
-    fi
-  done
+  if [ -d "$dir" ]; then
+    cd "$dir" || exit
+
+    echo "---- Running: Day $day ----"
+    v run main.v
+  else
+    echo "ERROR: Directory for Day $day not found"
+  fi
 }
 
-function run_all_days() {
-  for dir in ./day_*/
-  do
-    dir=${dir%*/}
-    readarray -d "_" -t arr <<< "$dir"
+run_all_days() {
+  for dir in ./day_*/; do
+    local day=${dir%"${dir##*[!/]}"}
+    day=${day##*/}
+    
+    cd "$dir" || exit
 
-    cd $dir
-    echo "---- Running: Day ${arr[1]} ----" | xargs
-
+    echo "---- Running: Day $day ----"
     v run main.v
-
+    
     echo
   done
 }
 
-if [ $1 = 'all' ]; then
+if [ "$1" = 'all' ]; then
   run_all_days
 else
   num_regex='^[0-9]+$'
-  if ! [[ $1 =~ $num_regex ]]; then
+  if ! [[ "$1" =~ $num_regex ]]; then
     echo "ERROR: Not a valid number" >&2; exit 1
   else
-    run_a_day $1
+    run_a_day "$1"
   fi
 fi
-
