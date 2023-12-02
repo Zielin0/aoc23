@@ -18,8 +18,8 @@ run_a_day() {
 
 run_all_days() {
   for dir in ./day_*/; do
-    local day=${dir%"${dir##*[!/]}"}
-    day=${day##*/}
+    local day=${dir#"./day_"}
+    day=${day%/}
     
     cd "$dir" || exit
 
