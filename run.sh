@@ -27,6 +27,8 @@ run_all_days() {
     v run main.v
     
     echo
+
+    cd ..
   done
 }
 
